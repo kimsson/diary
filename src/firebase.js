@@ -9,4 +9,8 @@ var config = {
   messagingSenderId: "170553132043"
 };
 firebase.initializeApp(config);
+
 export const database = firebase.database().ref('/notes')
+export const auth = firebase.auth();
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const twitterProvider = new firebase.auth.TwitterAuthProvider();

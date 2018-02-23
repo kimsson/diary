@@ -5,6 +5,7 @@ import moment from 'moment'
 import { connect } from 'react-redux';
 // methods
 import { getNotes, saveNote, deleteNote } from '../actions/notesAction'
+import { getUser } from '../actions/userAction';
 import NoteCard from './NoteCard';
 
 class App extends Component {
@@ -23,6 +24,7 @@ class App extends Component {
   // lifecycle
   componentDidMount() {
     this.props.getNotes();
+    this.props.getUser();
   }
   componentRecievedProps() {
   }
@@ -105,11 +107,12 @@ class App extends Component {
 };
 function mapStateToProps(state, ownProps) {
   return {
-    notes: state.notes
+    notes: state.notes,
+    user: state.user
   }
 }
 
 // map, dispatch
-export default connect(mapStateToProps, {getNotes, saveNote, deleteNote}) (App);
+export default connect(mapStateToProps, {getNotes, saveNote, deleteNote, getUser}) (App);
 
 
