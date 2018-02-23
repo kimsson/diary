@@ -6,13 +6,16 @@ class Login extends Component {
     return(
       <div className="container-fluid">
         <div className="row text-center">
-          <div className="col-sm-12 jumbotron">
+          <div className="col-sm-12 jumbotron" style={{marginTop:'-20px'}}>
             <h1>
             Login with your favourite <b>Social Network</b>
             </h1>
           </div>
           <div className="col-sm-6">
             <button className="btn btn-danger btn-lgn">Login with Google</button>
+          
+          </div>
+          <div className="col-sm-6">
             <button className="btn btn-success btn-lgn">Login with Twitter</button>
           </div>
         </div>
