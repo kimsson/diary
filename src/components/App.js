@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { database } from '../firebase';
 import _ from 'lodash';
 import moment from 'moment'
 
+import { connect } from 'react-redux';
+// methods
+import { getNotes, saveNote, deleteNote } from '../actions/notesAction'
+import NoteCard from './NoteCard';
 
 class App extends Component {
   constructor(props) {
@@ -11,8 +14,7 @@ class App extends Component {
     this.state = {
       title: '',
       body: '',
-      createdAt: 0,
-      notes: {}
+      createdAt: 0
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,11 +22,7 @@ class App extends Component {
   }
   // lifecycle
   componentDidMount() {
-    database.on('value',  (snapshot) =>{
-      this.setState({
-        notes: snapshot.val()
-      })
-    })
+    this.props.getNotes();
   }
   componentRecievedProps() {
   }
@@ -38,42 +36,46 @@ class App extends Component {
     const note = {
       title: this.state.title,
       body: this.state.body,
-      createdAt: new Date()
+      createdAt: new Date().getTime()
     }
-    database.push(note);
+    this.props.saveNote(note);
     this.setState({
       title: '',
       body: '',
       createdAt: 0
     })
   }
-  
+
   renderNotes () {
-    return _.map(this.state.notes, (note, key) => {
+    return _.map(this.props.notes, (note, key) => {
         return (
-          <div 
+          <NoteCard className=""
             key={key}>
-            <h2>{note.title}</h2>
+            <h2><small>{note.title}</small></h2>
             <p>{note.body}</p>
-            <p>{moment(note.createdAt).fromNow()}</p>
-          </div>
+            <p><small>{moment(note.createdAt).fromNow()}</small></p>
+            <button 
+              className="btn btn-danger btn-xs" 
+              onClick={() => this.props.deleteNote(key)}>Delete
+            </button>
+          </NoteCard>
         )
       })
   }
-  
   render() {
     return (
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3">
-            <form onSubmit={this.handleSubmit}>
+            <form 
+              onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <input
                   onChange={this.handleChange}
                   value={this.state.title}
                   type="text"
                   name="title"
-                  className="form-control no-border"
+                  className="form-control form-control-sm no-border"
                   placeholder="Titile..."
                   required
                 />
@@ -100,6 +102,14 @@ class App extends Component {
       </div>
     );
   }
+};
+function mapStateToProps(state, ownProps) {
+  return {
+    notes: state.notes
+  }
 }
 
-export default App;
+// map, dispatch
+export default connect(mapStateToProps, {getNotes, saveNote, deleteNote}) (App);
+
+
