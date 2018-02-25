@@ -11,7 +11,7 @@ import NoteCard from './NoteCard';
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       title: '',
       body: '',
@@ -22,10 +22,10 @@ class App extends Component {
     this.renderNotes = this.renderNotes.bind(this);
   }
   // lifecycle
-  componentDidMount() {
-    this.props.getNotes();
-    this.props.getUser();
-  }
+  // componentDidMount() {
+  //   this.props.getNotes();
+  //   this.props.getUser();
+  // }
   componentRecievedProps() {
   }
   handleChange (e) {
@@ -33,7 +33,7 @@ class App extends Component {
       [e.target.name]: e.target.value
     });
   }
-  handleSubmit (e) {   
+  handleSubmit (e) {
     e.preventDefault();
     const note = {
       title: this.state.title,
@@ -56,8 +56,8 @@ class App extends Component {
             <h2><small>{note.title}</small></h2>
             <p>{note.body}</p>
             <p><small>{moment(note.createdAt).fromNow()}</small></p>
-            <button 
-              className="btn btn-danger btn-xs" 
+            <button
+              className="btn btn-danger btn-xs"
               onClick={() => this.props.deleteNote(key)}>Delete
             </button>
           </NoteCard>
@@ -69,7 +69,7 @@ class App extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 col-sm-offset-3">
-            <form 
+            <form
               onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <input
@@ -82,7 +82,7 @@ class App extends Component {
                   required
                 />
                </div>
-               
+
                <div className="form-group">
                  <textarea
                    onChange={this.handleChange}
@@ -114,5 +114,3 @@ function mapStateToProps(state, ownProps) {
 
 // map, dispatch
 export default connect(mapStateToProps, {getNotes, saveNote, deleteNote, getUser}) (App);
-
-
