@@ -4,19 +4,16 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 class AuthenticatedComponent extends Component {
+
   componentDidUpdate() {
     //make sure the loading is done then if no user the push to login page
-
     const { userLoading, user } = this.props;
-    console.log('userLoading ', userLoading, ' user ', user );
 
     if(userLoading === false && !user) {
       this.props.history.push('/login');
     }
   }
-  componentWillReceiveProps(newProps) {
 
-  }
   render () {
     const { user, userLoading, children } = this.props;
     return( userLoading === false && user ) ? <div>{children}</div> : null;

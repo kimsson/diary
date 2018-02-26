@@ -3,6 +3,7 @@ import _ from 'lodash';
 import moment from 'moment'
 
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 // methods
 import { getNotes, saveNote, deleteNote } from '../actions/notesAction'
 import { getUser } from '../actions/userAction';
@@ -14,18 +15,13 @@ class App extends Component {
 
     this.state = {
       title: '',
-      body: '',
-      createdAt: 0
+      body: ''
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
   }
-  // lifecycle
-  // componentDidMount() {
-  //   this.props.getNotes();
-  //   this.props.getUser();
-  // }
+
   componentRecievedProps() {
   }
   handleChange (e) {
@@ -38,28 +34,32 @@ class App extends Component {
     const note = {
       title: this.state.title,
       body: this.state.body,
+      uid: this.props.user.uid,
       createdAt: new Date().getTime()
     }
     this.props.saveNote(note);
     this.setState({
       title: '',
-      body: '',
-      createdAt: 0
+      body: ''
     })
   }
 
   renderNotes () {
     return _.map(this.props.notes, (note, key) => {
         return (
-          <NoteCard className=""
-            key={key}>
+          <NoteCard key={key}>
+            <Link to={`/${key}`}>
+                <h2>{note.title}</h2>
+            </Link>
             <h2><small>{note.title}</small></h2>
             <p>{note.body}</p>
             <p><small>{moment(note.createdAt).fromNow()}</small></p>
-            <button
-              className="btn btn-danger btn-xs"
-              onClick={() => this.props.deleteNote(key)}>Delete
-            </button>
+            { note.uid === this.props.user.uid && (
+              <button
+                className="btn btn-danger btn-xs"
+                onClick={() => this.props.deleteNote(key)}>Delete
+              </button>
+            )}
           </NoteCard>
         )
       })
